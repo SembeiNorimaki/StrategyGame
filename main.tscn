@@ -1,10 +1,13 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://Tiles.tscn" type="PackedScene" id=1]
 [ext_resource path="res://GUI.tscn" type="PackedScene" id=2]
-[ext_resource path="res://icon.png" type="Texture" id=3]
+[ext_resource path="res://Bullet.tscn" type="PackedScene" id=3]
 [ext_resource path="res://main.gd" type="Script" id=4]
+[ext_resource path="res://CityView.gd" type="Script" id=5]
 [ext_resource path="res://Camera2D.gd" type="Script" id=6]
+[ext_resource path="res://MapView.gd" type="Script" id=7]
+[ext_resource path="res://Combat.gd" type="Script" id=8]
 
 [sub_resource type="CanvasItemMaterial" id=1]
 
@@ -14,28 +17,50 @@ script = ExtResource( 4 )
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="GUI" parent="CanvasLayer" instance=ExtResource( 2 )]
-margin_right = 65.0
-margin_bottom = 40.0
+margin_left = 18.6652
+margin_right = 115.665
+margin_bottom = 80.0
 
 [node name="CityView" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="Tiles" parent="CityView" instance=ExtResource( 1 )]
+material = SubResource( 1 )
+
+[node name="Camera2D" type="Camera2D" parent="CityView"]
+position = Vector2( -310.942, 872.385 )
+current = true
+script = ExtResource( 6 )
+
+[node name="HighlightedTile" type="Line2D" parent="CityView"]
+visible = false
+points = PoolVector2Array( 0, 0, 128, 64, 0, 128, -128, 64, 0, 0 )
+
+[node name="Line2D" type="Line2D" parent="CityView"]
+visible = false
+z_index = 1
+points = PoolVector2Array( 306.1, 195.909, 498.433, 453.296 )
+
+[node name="Percentage" type="Label" parent="CityView"]
+margin_right = 40.0
+margin_bottom = 14.0
+rect_min_size = Vector2( 10, 10 )
+rect_scale = Vector2( 3, 3 )
+text = "50%"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Bullet" parent="CityView" instance=ExtResource( 3 )]
 visible = false
 
-[node name="Sprite" type="Sprite" parent="."]
-
-[node name="Tiles" parent="." instance=ExtResource( 1 )]
-material = SubResource( 1 )
-tile_data = PoolIntArray( 65535, 0, 0 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 0, 500 )
-current = true
-zoom = Vector2( 2, 2 )
-script = ExtResource( 6 )
+[node name="Combat" type="Node" parent="CityView"]
+script = ExtResource( 8 )
 
 [node name="MapView" type="Node2D" parent="."]
 visible = false
-
-[node name="Sprite" type="Sprite" parent="MapView"]
-position = Vector2( 269.051, 163.925 )
-texture = ExtResource( 3 )
+script = ExtResource( 7 )
 [connection signal="BuildMenuSelection" from="CanvasLayer/GUI" to="." method="_on_GUI_BuildMenuSelection"]
+[connection signal="EndTurnPressed" from="CanvasLayer/GUI" to="." method="_on_GUI_EndTurnPressed"]
+[connection signal="MapViewPressed" from="CanvasLayer/GUI" to="." method="_on_GUI_MapViewPressed"]
+[connection signal="HitUnit" from="CityView/Bullet" to="." method="_on_Bullet_HitUnit"]

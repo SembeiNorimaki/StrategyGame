@@ -1,0 +1,21 @@
+{
+    "tiles": [{
+        "Position": [0, 0],
+        "Owner": "Player"
+    }, {
+        "Position": [0, 1],
+        "Owner": "Player"
+    }, {
+        "Position": [1, 0],
+        "Owner": "Neutral"
+    }, {
+        "Position": [1, 1],
+        "Owner": "Neutral"
+    }, {
+        "Position": [2, 0],
+        "Owner": "Enemy"
+    }, {
+        "Position": [2, 1],
+        "Owner": "Enemy"
+    }]
+}

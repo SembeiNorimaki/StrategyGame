@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://tiles/hexagons/blue.png" type="Texture" id=1]
+[ext_resource path="res://tiles/hexagons/blue2.png" type="Texture" id=2]
+
+[node name="MapBlue" type="TextureButton"]
+margin_left = 211.884
+margin_top = 98.7236
+margin_right = 311.884
+margin_bottom = 184.724
+toggle_mode = true
+texture_normal = ExtResource( 1 )
+texture_pressed = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}

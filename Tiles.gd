@@ -19,8 +19,29 @@ var tileName2Id = {
 	'CD':12	
 }
 
+var tileId2Name = {
+	0: 'Ground',
+	1: 'Water',
+	2: 'AB',   
+	3: 'ABC',   
+	4: 'ABCD',
+	5: 'ABD',   
+	6: 'AC',   
+	7: 'ACD',   
+	8: 'AD',   
+	9: 'BC',
+	10: 'BCD',
+	11: 'BD',
+	12: 'CD'
+}
+
+
+func mapToWorldCentered(coord):
+	return map_to_world(coord) + Vector2(0,64)
+
 func MessageListener():
 	print('message received')
+
 
 func shortestPath(ori, dest):
 	var path = []
@@ -39,20 +60,12 @@ func shortestPath(ori, dest):
 	return path
 
 
-func loadMap(filename):
-	var file = File.new()
-	file.open(filename, file.READ)
-	var json = file.get_as_text()
-	var mapData = JSON.parse(json).result
-	file.close()
-	var idx = 0
-	for j in range(32):
-		for i in range(32):
-			mapData.map[idx]
-			set_cellv(Vector2(i,j), mapData.map[idx])
-			idx += 1
-	for j in range(32):
-		for i in range(32):
+func populateTiles(tileData):
+	for j in range(tileData.size()):
+		for i in range(tileData[0].size()):
+			set_cellv(Vector2(i,j), tileData[j][i])
+	for j in range(tileData.size()):
+		for i in range(tileData[0].size()):
 			updateRoad(Vector2(i,j), 'update')
 
 
@@ -124,18 +137,21 @@ func updateRoad(tilePos, action):
 		updateRoad(tilePos+Vector2(-1,0), 'update')
 		updateRoad(tilePos+Vector2(0,1), 'update')
 		updateRoad(tilePos+Vector2(0,-1), 'update')
+		return 'Ground'
 	elif action == 'place' and not isRoad(tilePos):
 		set_cellv(tilePos, getRoadTileId(tilePos))
 		updateRoad(tilePos+Vector2(1,0), 'update')
 		updateRoad(tilePos+Vector2(-1,0), 'update')
 		updateRoad(tilePos+Vector2(0,1), 'update')
 		updateRoad(tilePos+Vector2(0,-1), 'update')
+		return tileId2Name[getRoadTileId(tilePos)]
 	elif action == 'update' and isRoad(tilePos):
 		set_cellv(tilePos, getRoadTileId(tilePos))
+		return tileId2Name[getRoadTileId(tilePos)]
 
 
 func _ready():
-	loadMap('res://map.json')
+	pass
 
 
 #func _process(delta):
